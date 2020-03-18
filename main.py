@@ -29,7 +29,7 @@ def enterClicked():
 
     else:
         print("invalid")
-        intCheck.configure(text="Invalid Entry")
+        intCheck.configure(text="Invalid Entry(unless decimal)")
 
     print(userMin)
 
@@ -47,8 +47,14 @@ def timeControl():
 
 
 def startClicked():
+    timeMin = minBox.get()
+
+    timeSec = (float(timeMin)*60)
+
+    print(timeSec)
+
     print("start clicked")
-    timer = threading.Timer(10, timeControl)
+    timer = threading.Timer(float(timeSec), timeControl)
     timer.start()
 
 
