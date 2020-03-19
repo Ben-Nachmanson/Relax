@@ -3,14 +3,6 @@ from playsound import playsound
 import time
 
 
-def on_press(key):
-    try:
-        print('alphanumeric key {0} pressed'.format(
-            key.char))
-    except AttributeError:
-        print('special key {0} pressed'.format(
-            key))
-
 
 def keyboardListener(key):
     global clickCheck
@@ -20,9 +12,8 @@ def keyboardListener(key):
     print("click")
 
 
-def timeDone():
+def Play():
     playsound('Tram-bell-sound-effect.mp3')
-
 
 def timeControl():
 
@@ -36,10 +27,10 @@ def timeControl():
 
         if i == mainTime and clickCheck == True:
             clickCheck == False
-            timeDone()
+            Play()
             i = 0
         elif i % standbyTime == 0:
-            if clickCheck == True:
+            if clickCheck:
                 clickCheck = False
             else:
                 i = 0
@@ -52,6 +43,6 @@ clickCheck = False
 mainTime = 10
 standbyTime = 5
 
-with Listener(on_press=keyboardListener) as l:
+with Listener(keyboardListener) as l:
     timeControl()
     l.run()
