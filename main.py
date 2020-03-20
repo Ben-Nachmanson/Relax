@@ -9,10 +9,9 @@ def keyboardListener(key):
 
     clickCheck = True
 
-    print("click")
-
 
 def Play():
+    playsound('Tram-bell-sound-effect.mp3')
     playsound('Tram-bell-sound-effect.mp3')
 
 def timeControl():
@@ -25,24 +24,25 @@ def timeControl():
     while i < mainTime+1:
         time.sleep(1.0)
 
-        if i == mainTime and clickCheck == True:
+        if i == mainTime:
             clickCheck == False
-            Play()
+            Play()            
             i = 0
         elif i % standbyTime == 0:
             if clickCheck:
                 clickCheck = False
-            else:
+                i = i + 1
+            else: 
                 i = 0
+        else:
+             i = i + 1
 
-        i = i+1
-        print(i)
 
 
 clickCheck = False
-mainTime = 10
-standbyTime = 5
-
+mainTime = 20*60 # the bell will sound when there was no break for 
+standbyTime = 5*60 # five minutes brake silence the bell
+Play()
 with Listener(keyboardListener) as l:
     timeControl()
     l.run()
