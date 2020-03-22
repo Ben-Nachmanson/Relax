@@ -11,11 +11,9 @@ def keyboardListener(key):
     clickCheck = True
 #    print('press')
 
-def Play(n):
+def Play():
     global bellSound
-    while n > 0: 
-          playsound(bellSound)
-          n -= 1
+    playsound(bellSound)
 
 def timeControl():
     global bellTime    
@@ -27,7 +25,7 @@ def timeControl():
 
         if i == bellTime:
             clickCheck == False
-            Play(2)            
+            Play()            
             i = 1
         else: 
              if clickCheck:
@@ -42,11 +40,10 @@ path = sys.argv[0]
 # head and tail pair 
 dir = os.path.split(path) [0]
 print(dir)
-bellSound = os.path.join(dir, 'Tram-bell-sound-effect.mp3')
+bellSound = os.path.join(dir, 'bell.mp3')
 
 clickCheck = False
 bellTime = 10 # the bell will sound when there was no break for 10 break intervals: 50 minutes
-Play(1)
 with Listener(keyboardListener) as l:
     timeControl()
     l.run()
