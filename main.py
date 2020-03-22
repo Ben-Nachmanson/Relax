@@ -1,7 +1,8 @@
 from pynput.keyboard import Listener
 from playsound import playsound
 import time
-
+import os
+import sys
 
 
 def keyboardListener(key):
@@ -11,8 +12,9 @@ def keyboardListener(key):
 #    print('press')
 
 def Play(n):
+    global bellSound
     while n > 0: 
-          playsound('Tram-bell-sound-effect.mp3')
+          playsound(bellSound)
           n -= 1
 
 def timeControl():
@@ -34,6 +36,13 @@ def timeControl():
              else: 
                 i = 1
 
+path = sys.argv[0]
+  
+# Split the path in  
+# head and tail pair 
+dir = os.path.split(path) [0]
+print(dir)
+bellSound = os.path.join(dir, 'Tram-bell-sound-effect.mp3')
 
 clickCheck = False
 bellTime = 10 # the bell will sound when there was no break for 10 break intervals: 50 minutes
