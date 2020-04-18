@@ -7,7 +7,11 @@ import sys
 
 def keyboardListener(key):
     global click
+    global bellPending
 
+    if bellPending > 0:
+        Play()
+        bellPending = 0
     click = True
 #    print('press')
 
@@ -18,7 +22,8 @@ def Play():
 def timeControl():
     global bellTime    
     global click
-
+    global bellPending
+    
     i = 0
 
     sleepTime = 10 # seconds
@@ -26,9 +31,14 @@ def timeControl():
     while True:
         time.sleep(sleepTime)
 
-        if i >= bellTime:
-            click == False
-            Play()            
+        if bellPending > 0:
+            bellPending = bellPending - sleepTime
+            if bellPending <= 0:
+               bellPending = 0
+               i = 0  #break happened
+        elif i >= bellTime:
+            bellPending = bellTime - clickTime #
+            click = False
             i = 0
         elif i % breakTime == 0:
                   if click:
@@ -53,8 +63,10 @@ bellSound = os.path.join(dir, 'bell.mp3')
 breakTime = 300 # five minutes
 bellTime = breakTime * 12 # the bell will sound when there was no break for 12 break intervals: 60 minutes
 
-
+bellPending = 0 
 click = False
+clickTime = 0 #the time of the last click
+
 with Listener(keyboardListener) as l:
     timeControl()
     l.run()
