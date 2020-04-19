@@ -10,32 +10,24 @@ def keyboardListener(key):
     global workTime
     global breakTime
     global bellTime
-    global start
     global bellSound
     
-    if start : #init stage
-       start = False
-       #print('press')
-       clickTime = datetime.datetime.now()
-       #print('here')
+    now = datetime.datetime.now()
+    #print("ee")
+    delta = now - clickTime
+    #print  delta.minutes
+    if delta.minutes == 0:
+       return
+    if delta.minutes >= breakTime:
        workTime = 0
-    else:
-       now = datetime.datetime.now()
-       #print("ee")
-       delta = now - clickTime
-       #print  delta.minutes
-       if delta.minutes == 0:
-          return
-       if delta.minutes >= breakTime:
-          workTime = 0
-       else: 
-          workTime = workTime + delta.minutes
-       clickTime = now 
+    else: 
+       workTime = workTime + delta.minutes
+    clickTime = now 
        #print( "workTime = %d "% ( workTime))    
 
-       if workTime >= bellTime:
-          playsound(bellSound)
-          workTime = 0
+    if workTime >= bellTime:
+       playsound(bellSound)
+       workTime = 0
                 
 
 mypy = sys.argv[0]
@@ -49,7 +41,6 @@ bellTime = 60 # minutes
 
 workTime = 0 # continious work time
 clickTime = datetime.datetime.now()
-start = True
 
 with Listener(on_press= keyboardListener) as listener:
     listener.join()
