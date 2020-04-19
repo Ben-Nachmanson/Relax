@@ -15,13 +15,13 @@ def keyboardListener(key):
     now = datetime.datetime.now()
     #print("ee")
     delta = now - clickTime
-    #print  delta.minutes
-    if delta.minutes == 0:
+    #print  delta.seconds
+    if delta.seconds == 0:
        return
-    if delta.minutes >= breakTime:
+    if delta.seconds >= breakTime:
        workTime = 0
     else: 
-       workTime = workTime + delta.minutes
+       workTime = workTime + delta.seconds
     clickTime = now 
        #print( "workTime = %d "% ( workTime))    
 
@@ -36,8 +36,8 @@ mypy = sys.argv[0]
 dir = os.path.split(mypy) [0]
 bellSound = os.path.join(dir, 'bell.mp3')
 
-breakTime = 5 # minutes
-bellTime = 60 # minutes
+breakTime = 5*60 # five minutes
+bellTime = 60*60 # an hour
 
 workTime = 0 # continious work time
 clickTime = datetime.datetime.now()
