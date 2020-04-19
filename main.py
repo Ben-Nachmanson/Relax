@@ -3,81 +3,53 @@ from playsound import playsound
 import time
 import os
 import sys
-
+import datetime
 
 def keyboardListener(key):
-    global click
-    global bellPending
-    global i
     global clickTime
-    
-    if bellPending > 0:
-        Play()
-        bellPending = 0
-    else:    
-        click = True
-        clickTime = i
-#    print('press')
-
-def Play():
+    global workTime
+    global breakTime
+    global bellTime
+    global start
     global bellSound
-    playsound(bellSound)
-
-def timeControl():
-    global bellTime    
-    global click
-    global bellPending
-    global i
-    global clickTime
     
-    i = 0
+    if start : #init stage
+       start = False
+       #print('press')
+       clickTime = datetime.datetime.now()
+       #print('here')
+       workTime = 0
+    else:
+       now = datetime.datetime.now()
+       #print("ee")
+       delta = now - clickTime
+       #print  delta.minutes
+       if delta.minutes == 0:
+          return
+       if delta.minutes >= breakTime:
+          workTime = 0
+       else: 
+          workTime = workTime + delta.minutes
+       clickTime = now 
+       #print( "workTime = %d "% ( workTime))    
 
-    sleepTime = 1 # seconds
+       if workTime >= bellTime:
+          playsound(bellSound)
+          workTime = 0
+                
 
-    while True:
-        time.sleep(sleepTime)
-
-        if bellPending > 0:
-            bellPending = bellPending - sleepTime
-            if bellPending <= 0:
-               bellPending = 0
-               i = 0
-               # print("break happened at on belltime")
-        elif i >= bellTime:
-            bellPending = bellTime - clickTime #
-            if bellPending <= 0:
-               bellPending = 1
-            #print ("bellPending = " + str(bellPending))
-            click = False
-            i = 0
-        elif i % breakTime == 0:
-                  if click:
-                      click = False
-                      i = i + sleepTime
-                      #print("no break")
-                  else: 
-                      i = 0
-                      #print("got a break")
-        else: 
-             i = i + sleepTime
-             
-
-path = sys.argv[0]
+mypy = sys.argv[0]
   
-# Split the path in  
-# head and tail pair 
-dir = os.path.split(path) [0]
-#print(dir)
+# get the mypy directory 
+dir = os.path.split(mypy) [0]
 bellSound = os.path.join(dir, 'bell.mp3')
 
-breakTime = 300 # five minutes
-bellTime = breakTime * 12 # the bell will sound when there was no break for 12 break intervals: 60 minutes
+breakTime = 5 # minutes
+bellTime = 60 # minutes
 
-bellPending = 0 
-click = False
-clickTime = 0 #the time of the last click
-#print ("bellPending = " + str(bellPending))
+workTime = 0 # continious work time
+clickTime = datetime.datetime.now()
+start = True
 
-with Listener(keyboardListener) as l:
-    timeControl()
-    l.run()
+with Listener(on_press= keyboardListener) as listener:
+    listener.join()
