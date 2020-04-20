@@ -1,5 +1,5 @@
 # Relax
-This script is inspired by ** Awarenes ** [http://iamfutureproof.com/tools/awareness/]: the idea is to detect if you work too hard, one hour without even a 5 minute break, and ring a bell in this case.
+This script is inspired by [Awarenes](http://iamfutureproof.com/tools/awareness/): the idea is to detect if you work too hard, one hour without even a 5 minute break, and ring a bell in this case.
 If you take a break then there will be no bell sound.
 ## Prerequisites
 Necessary Libraries
