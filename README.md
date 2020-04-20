@@ -1,6 +1,7 @@
 # Relax
-This script is inspired by [Awarenes](http://iamfutureproof.com/tools/awareness/): the idea is to detect if you work too hard, one hour without even a 5 minute break, and ring a bell in this case.
-If you take a break then there will be no bell sound.
+This script is inspired by [Awarenes](http://iamfutureproof.com/tools/awareness/): The idea is to detect if you work too hard, and leave you alone otherwise. If you take at least a 5 minute break then nothing would happen. A gong will sound it the other case.
+
+Run "python main.py" to start the script. More instructions about installation are coming.
 ## Prerequisites
 Necessary Libraries
 ```
