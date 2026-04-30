@@ -38,15 +38,20 @@ if [[ -z "$PYTHON_BIN" ]]; then
     exit 1
 fi
 
-echo "==> Creating virtualenv at: $APP_DIR/venv"
-"$PYTHON_BIN" -m venv "$APP_DIR/venv"
+VENV_DIR="$APP_DIR/venv"
+if [[ -x "$VENV_DIR/bin/python" ]]; then
+    echo "==> Reusing existing virtualenv at: $VENV_DIR"
+else
+    echo "==> Creating virtualenv at: $VENV_DIR"
+    "$PYTHON_BIN" -m venv "$VENV_DIR"
+fi
 # shellcheck disable=SC1091
-source "$APP_DIR/venv/bin/activate"
+source "$VENV_DIR/bin/activate"
 pip install --quiet --upgrade pip
 pip install --quiet pynput
 deactivate
 
-VENV_PYTHON="$APP_DIR/venv/bin/python"
+VENV_PYTHON="$VENV_DIR/bin/python"
 
 echo "==> Writing LaunchAgent: $PLIST_PATH"
 sed \
