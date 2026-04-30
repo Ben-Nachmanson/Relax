@@ -81,5 +81,6 @@ Logs:
   $APP_DIR/relax.log
   $APP_DIR/relax.err.log
 
-To uninstall, run: $SRC_DIR/uninstall.sh
+To uninstall, run:
+  curl -fsSL https://raw.githubusercontent.com/Ben-Nachmanson/Relax/master/uninstall.sh | bash
 EOF
