@@ -10,6 +10,18 @@ if [[ "$(uname)" != "Darwin" ]]; then
 fi
 
 SRC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# If main.py / bell.mp3 aren't next to this script (e.g. when installed via
+# `curl ... | bash` or by downloading just install.sh), fetch the full repo
+# into a temporary directory and use that as the source.
+if [[ ! -f "$SRC_DIR/main.py" || ! -f "$SRC_DIR/bell.mp3" || ! -f "$SRC_DIR/com.nachmanson.relax.plist.template" ]]; then
+    REPO_TARBALL="https://github.com/Ben-Nachmanson/Relax/archive/refs/heads/master.tar.gz"
+    TMP_SRC="$(mktemp -d)"
+    trap 'rm -rf "$TMP_SRC"' EXIT
+    echo "==> Downloading Relax sources from GitHub"
+    curl -fsSL "$REPO_TARBALL" | tar -xz -C "$TMP_SRC"
+    SRC_DIR="$TMP_SRC/Relax-master"
+fi
 APP_DIR="$HOME/Library/Application Support/Relax"
 AGENT_DIR="$HOME/Library/LaunchAgents"
 PLIST_LABEL="com.nachmanson.relax"
