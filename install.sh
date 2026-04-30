@@ -37,26 +37,20 @@ if [[ -z "$PYTHON_BIN" ]]; then
     echo "python3 not found. Install it (e.g. from https://www.python.org/downloads/) and re-run." >&2
     exit 1
 fi
+# Use the *resolved* python binary so launchd executes the same file path that
+# macOS TCC tracks for Accessibility / Input Monitoring permissions.
+REAL_PYTHON="$("$PYTHON_BIN" -c 'import os,sys; print(os.path.realpath(sys.executable))')"
 
-VENV_DIR="$APP_DIR/venv"
-if [[ -x "$VENV_DIR/bin/python" ]]; then
-    echo "==> Reusing existing virtualenv at: $VENV_DIR"
-else
-    echo "==> Creating virtualenv at: $VENV_DIR"
-    "$PYTHON_BIN" -m venv "$VENV_DIR"
-fi
-# shellcheck disable=SC1091
-source "$VENV_DIR/bin/activate"
-pip install --quiet --upgrade pip
-pip install --quiet pynput
-deactivate
-
-VENV_PYTHON="$VENV_DIR/bin/python"
+LIB_DIR="$APP_DIR/lib"
+echo "==> Installing pynput into: $LIB_DIR"
+mkdir -p "$LIB_DIR"
+"$REAL_PYTHON" -m pip install --quiet --upgrade --target "$LIB_DIR" --break-system-packages pynput
 
 echo "==> Writing LaunchAgent: $PLIST_PATH"
 sed \
-    -e "s|__PYTHON__|$VENV_PYTHON|g" \
+    -e "s|__PYTHON__|$REAL_PYTHON|g" \
     -e "s|__APPDIR__|$APP_DIR|g" \
+    -e "s|__PYTHONPATH__|$LIB_DIR|g" \
     "$SRC_DIR/com.nachmanson.relax.plist.template" > "$PLIST_PATH"
 
 UID_NUM="$(id -u)"
@@ -77,10 +71,13 @@ IMPORTANT — grant keyboard permission (one-time):
   macOS will prompt to allow keyboard monitoring. If it does not, open:
     System Settings -> Privacy & Security -> Input Monitoring
   and turn ON the entry for the Python interpreter:
-    $VENV_PYTHON
+    $REAL_PYTHON
   (You may also need the same entry under "Accessibility".)
   After granting permission, run:
     launchctl kickstart -k gui/$UID_NUM/$PLIST_LABEL
+
+  (You may see "This process is not trusted!" in relax.err.log — that warning
+  is printed once at startup and can be ignored as long as the bell rings.)
 
 Logs:
   $APP_DIR/relax.log

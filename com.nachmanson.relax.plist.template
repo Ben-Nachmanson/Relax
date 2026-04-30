@@ -11,6 +11,12 @@
         <string>__APPDIR__/main.py</string>
     </array>
 
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PYTHONPATH</key>
+        <string>__PYTHONPATH__</string>
+    </dict>
+
     <key>WorkingDirectory</key>
     <string>__APPDIR__</string>
 
