@@ -36,6 +36,19 @@ python3 main.py
 ```
 Do not move `main.py` away from `bell.mp3`.
 
+## Native macOS app (SwiftUI menu bar)
+
+A full macOS `.app` lives in [`mac-app/`](./mac-app/). Build and run with:
+```
+cd mac-app
+./build-app.sh
+open build/Relax.app
+```
+Requires macOS 13+ and Xcode (or the Command Line Tools). The native version
+needs **no** Input Monitoring / Accessibility permissions — it uses the
+system idle clock (`CGEventSource.secondsSinceLastEventType`) instead of
+keyboard hooking. See [`mac-app/README.md`](./mac-app/README.md) for details.
+
 ## Authors
 * **Ben Nachmanson**
 * **Lev Nachmanson** [https://github.com/levnach]
